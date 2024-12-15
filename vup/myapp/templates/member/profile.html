@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Taviraj:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -194,10 +195,12 @@
 
     /* กรอบครอบชั้นที่สอง */
     .content-box {
-        border: 4px solid #f65c5c; 
+        width: 85%;
+        margin-left: 30px;
+        border: 2px solid #cfcfcf; 
         padding: 15px;
         border-radius: 8px; 
-        background-color: #ede9fe; 
+        background-color: #f7f7f7; 
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     }
 
@@ -208,11 +211,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin: 0;
     }
 
     .in-box-profile-show {
         display: flex;
         /* background-color: #2d7e23; */
+        margin-top: 10px;
     }
 
 
@@ -230,6 +235,7 @@
         font-size: 18px;
         font-weight: bold;
         color: #000000; 
+        
     }
 
     .box-age {
@@ -238,45 +244,86 @@
         align-items: center;
         width: 30px; 
         height: 30px;
-        background-color: #e7af16;
+        background-color: #425774;
         border-radius: 50%; 
         /* border: 2px solid #ffffff;  */
         object-fit: cover; 
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         font-size: 12px;
-        color: #000000;
+        color: #ffffff;
         text-align: center;
         margin-top: 5px;
         margin-left: 10px;
+
     }
 
- 
-    .description-show{
-        margin-top: 10px;
-        font-size: 18px;
-        font-weight: bold;
-        color: #4a4a4a;
-    }
-
-    .edit-button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
+    
+        .description-show{
+            margin-top: 10px;
             font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
+            /* font-weight: bold; */
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            margin-top: -5px;
         }
+
+        .head-info-user{
+            display: flex;
+            justify-content: space-between; /* จัดตำแหน่งข้อความและปุ่มให้ห่างกัน */
+            align-items: center;
+            font-size: 18px;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .profile-details{
+            margin-left: 20px;
+            margin-right: 20px; 
+        }
+
+        .rating-box {
+            border: 2px solid #cfcfcf; /* สีกรอบของกล่อง */
+            padding: 0px; /* ขนาด padding ภายในกล่อง */
+            border-radius: 8px; /* ทำมุมให้กล่องมน */
+            display: inline-flex;
+            align-items: center;
+            width: 90%;
+            height: 100px;
+            margin-left: 30px;
+            margin-bottom: 20px;
+            background-color: #f3f3f3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .box-btn-edit {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .edit-button {
+            background-color: #47607a; /* สีพื้นหลัง */
+            border: 1px solid #a5a5a5; 
+            color: white; /* สีของไอคอน */
+            font-size: 12px; /* ขนาดของไอคอน */
+            padding: 10px;
+            border-radius: 50px; /* ทำให้ปุ่มเป็นวงกลม */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease; /* เพิ่มเอฟเฟกต์เมื่อโฮเวอร์ */
+        }
+
+        .edit-button i {
+            margin-left: 5px; /* เพิ่มช่องว่างระหว่างไอคอนและข้อความ */
+        }
+    
 
         .edit-button:hover {
-            background-color: #0056b3;
+            background-color: #477db6;
         }
 
-        /* Pop-up Modal */
         .modal {
             /* justify-content:center; */
             display: none;
@@ -394,13 +441,23 @@
                 <p class="description-show",id="current-description">{{ user.description|default:"เพิ่มคำอธิบาย" }}</p>
             </div>
             
+            <div class="rating-box">
+                <p></i> Rating</p>
+            </div>
 
             <div class="content-box">
                
                 <div class="profile-container">
                     <div class="profile-details">
-                        <!-- แสดงข้อมูลผู้ใช้ -->
-                        <!-- <p><strong>ชื่อผู้ใช้:</strong> {{ user.username }}</p> -->
+                        <div class="head-info-user">
+                            <p><i class="fa-solid fa-user"></i>ข้อมูลผู้ใช้</p>
+                            <div class="box-btn-edit">
+                                <button id="edit-profile-btn" class="edit-button">
+                                    <i class="fa-regular fa-pen-to-square"></i> Edit <!-- ไอคอนแก้ไข -->
+                                </button>   
+                            </div>
+                        </div>
+                        
                         <p><strong>Email :</strong> {{ user.email }}</p>
                         <p><strong>Firstname :</strong> {{ user.first_name }}</p>
                         <p><strong>Lastname :</strong> {{ user.last_name }}</p>
@@ -409,7 +466,7 @@
                         <!-- <p><strong>คำอธิบาย:</strong> {{ user.description|default:"ยังไม่มีคำอธิบาย" }}</p> -->
                     </div>
 
-                <button id="edit-profile-btn" class="edit-button">แก้ไขข้อมูล</button>
+                <!-- <button id="edit-profile-btn" class="edit-button">แก้ไขข้อมูล</button> -->
 
             <!-- ฟอร์มแก้ไขข้อมูลส่วนตัวจ้าาา -->
             <div id="edit-profile-modal" class="modal">
