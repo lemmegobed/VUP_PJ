@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.utils.timesince import timesince
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.csrf import csrf_exempt
 
 def login_view(request):
     if request.method == 'POST':
@@ -108,7 +109,24 @@ def new_event_view(request):
 #         event.time_since_created = timesince(event.created_at)  
 #     return render(request, 'your_template.html', {'events': events})
 
+# @csrf_exempt
+# def request_to_join(request, event_id):
+#     if request.method == "POST":
+#         data = json.loads(request.body)
+#         receiver_id = data.get("receiver_id")
+#         sender = request.user
+#         event = Event.objects.get(id=event_id)
 
+#         # บันทึก Notification
+#         Notification.objects.create(
+#             sender=sender,
+#             receiver_id=receiver_id,
+#             event=event,
+#             message=f"{sender.username} ต้องการเข้าร่วมกิจกรรม {event.name}"
+#         )
+
+#         return JsonResponse({"message": "คำขอเข้าร่วมถูกส่งเรียบร้อยแล้ว"})
+#     return JsonResponse({"error": "Invalid request"}, status=400)
 
 def edit_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
@@ -193,6 +211,7 @@ def filter_events(request):
     })
 
 
+
 @login_required
 def request_to_join(request, event_id):
     event = get_object_or_404(Event, id=event_id)
@@ -247,8 +266,6 @@ def chatroom_view(request, event_id):
 
     messages = chatroom.messages.all()
     return render(request, "chatroom.html", {"chatroom": chatroom, "messages": messages})
-
-
 
 
 def logout_view(request):

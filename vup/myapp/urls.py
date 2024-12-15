@@ -18,6 +18,9 @@ urlpatterns = [
     path('new_event/', new_event_view, name='new_event'),
     # path('update_event/<int:event_id>/', update_event_view, name='update_event'),
     path('edit-event/<int:event_id>/', edit_event, name='edit_event'),
+    path("event/<int:event_id>/join/",request_to_join, name="request_to_join"),
+    path("notification/<int:notification_id>/<str:action>/", respond_to_request, name="respond_to_request"),
+    path("chatroom/<int:event_id>/", chatroom_view, name="chatroom"),
     
     path('delete-event/<int:event_id>/', delete_event_view, name='delete_event'),
     path('search/', search_events, name='search_events'),
