@@ -1,0 +1,55 @@
+{% extends 'staff/mains/base.html' %}
+
+{% block main %}
+
+    <section class="w-11/2 md:4/5 h-screen m-auto flex items-center">
+        <div class="w-full flex flex-col md:flex-row md:justify-between md:space-x-10 items-center">
+            <div class="relative ">
+                <img id="image" class="max-w-full h-auto" src="{{fish.image.url}}" alt="{{fish.fish_name}}">
+            
+            </div>
+            <div class="space-y-4 p-5">
+                <h1 class="text-xl font-bold">สายพันธุ์ {{fish.species}}</h1>
+                <h1 class="text-3xl font-bold text-accent">{{fish.fish_name}}</h1>
+                <p class="text-sm"> <div class="badge badge-outline"><strong>เพศ</strong></div> {{ fish.get_gender_display }} <div class="badge badge-outline"><strong> น้ำหนัก </strong></div> {{ fish.size }} กิโลกรัม <div class="badge badge-outline"><strong>วันเกิด</strong></div> {{fish.birth_date|date:"d/m/Y"}} </p>
+                <p class="text-sm"> <div class="badge badge-outline"><strong>คำอธิบาย </strong></div><br> {{ fish.description }} </p>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="badge badge-outline">
+                        <h2 class="text-sm"><strong>อาหารของปลา</strong></h2>
+                    </div>       
+                </div>
+         
+                
+                {% if foods %}
+                <ul>
+                        {% for food in foods %}
+                            <li><strong>ประเภทอาหาร:</strong> {{ food.food_type }} | <strong>ชื่ออาหาร:</strong> {{ food.food_name }} | <strong>ความถี่การให้อาหาร:</strong> {{ food.feeding_frequency }} ครั้งต่อวัน | <strong>แหล่งอาหาร:</strong> {{ food.get_food_source_display }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>ไม่มีข้อมูลอาหาร</p>
+                {% endif %}
+
+                <div class="flex items-center space-x-4">
+                    <div class="badge badge-outline">
+                        <h2 class="text-sm  "><strong>แหล่งที่อยู่ของปลา</strong></h2>
+                    </div>
+
+                </div>               
+
+                {% if habitats %}
+                    <ul>
+                        {% for habitat in habitats %}
+                            <li><strong>ชื่อแหล่งที่อยู่:</strong> {{ habitat.habitat_name }} | <strong>อุณหภูมิ:</strong> {{ habitat.temperature }} °C | <strong>pH:</strong> {{ habitat.ph_level }} | <strong>การอพยพ:</strong> {{ habitat.get_migration_display }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>ไม่มีข้อมูลแหล่งที่อยู่</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+ 
+
+{% endblock %}

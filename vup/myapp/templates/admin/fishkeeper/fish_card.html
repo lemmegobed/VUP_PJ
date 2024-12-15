@@ -1,0 +1,39 @@
+{% extends 'staff/mains/base.html' %}
+
+{% block main %}
+
+<div class="text-bold text-center text-lg mt-3">
+    <p class="text-2xl font-bold">ปลาในอควาเรียม</p>
+</div>
+<div class="flex flex-wrap space-x-4 p-4  justify-center">
+    {% for fish in fishes %}            
+       <div key={fish.id} class="card bg-base-100 w-80 shadow-xl my-3 ">
+           <figure>
+               <img
+                   src={{fish.image.url}}
+                   alt={{fish.fish_name}}
+               />
+           </figure>
+           <div class="card-body ">
+               <h2 class="card-title ">
+                   น้อง {{fish.fish_name}}
+                   <div class="badge badge-info">
+                        <a href="{% url 'fish_card_detail' fish.id %}">
+                            <p class="font-light">ดูรายละเอียด</p>
+                        </a>
+                    </div>
+               </h2>
+               <p> สายพันธุ์ {{fish.species}} <br>น้ำหนัก {{fish.size}} กิโลกรัม
+               </p>
+               
+               <div class="card-actions justify-end">
+                   <div class="badge badge-outline">วันเกิด {{fish.birth_date|date:"d/m/Y"}}</div>
+                   <div class="badge badge-outline">เพศ {{fish.get_gender_display}}</div>
+               </div>
+               
+           </div>
+       </div>
+    {% endfor%}
+    </div>
+
+{% endblock %}

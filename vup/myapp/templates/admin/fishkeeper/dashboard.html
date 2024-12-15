@@ -1,0 +1,110 @@
+{% extends 'staff/mains/base.html' %}
+
+{% block main %}
+<section class="w-full p-8 bg-gray-100 min-h-screen">
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- การ์ดสำหรับแสดงจำนวนปลา -->
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">จำนวนปลาทั้งหมด</h2>
+                <p class="text-4xl font-bold text-accent">{{ fish_count }} ตัว</p>
+            </div>
+        </div>
+         <!-- กราฟ gender chart -->
+         <div class="mt-8">
+            <h2 class="text-2xl font-semibold mb-4">สถิติเพศของปลา</h2>
+            <canvas id="genderChart" width="400" height="150"></canvas>
+        </div>
+        <!-- กราฟ foodSource Chart -->
+        <div class="mt-8">
+            <h2 class="text-2xl font-semibold mb-4">สถิติแหล่งอาหารของปลา</h2>
+        
+        </div>
+        <div class="flex justify-center ">
+            <canvas id="foodSourceChart" style="max-width: 600px; height: 50px; margin-bottom: 0;"></canvas>
+
+        </div>
+
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('genderChart').getContext('2d');
+    var fishChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['ตัวผู้', 'ตัวเมีย', 'ไม่ทราบเพศ'],  // กำหนด label ตามประเภทเพศ
+            datasets: [{
+                label: '',  // ลบ label เพื่อไม่ให้แสดงข้อความข้างแถบสีฟ้าเล็กๆ
+                data: [{{ male_count }}, {{ female_count }}, {{ unknown_count }}],  // จำนวนปลาในแต่ละเพศ
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',  // สีสำหรับตัวผู้
+                    'rgba(255, 99, 132, 0.2)',  // สีสำหรับตัวเมีย
+                    'rgba(150, 150, 150, 0.2)'  // สีสำหรับไม่ทราบเพศ
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',  // สีขอบสำหรับตัวผู้
+                    'rgba(255, 99, 132, 1)',  // สีขอบสำหรับตัวเมีย
+                    'rgba(150, 150, 150, 1)'  // สีขอบสำหรับไม่ทราบเพศ
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true  // กำหนดให้แกน y เริ่มจาก 0
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false  // ซ่อน legend เพื่อไม่ให้แสดงกราฟสีฟ้าเล็กๆ ข้าง label
+                }
+            }
+        }
+    });
+
+  
+
+    var ctx = document.getElementById('foodSourceChart').getContext('2d');
+    var foodSourceChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ food_labels|safe }},  // ชื่อแหล่งอาหาร
+            datasets: [{
+                data: {{ food_data|safe }},  // จำนวนปลาในแต่ละแหล่งอาหาร
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',  // สีสำหรับแต่ละแหล่งอาหาร
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                   
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',  // ตำแหน่งของ legend
+                    
+                    
+                },
+            }
+        }
+    });
+
+
+</script>
+
+
+{% endblock %}

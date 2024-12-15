@@ -1,0 +1,76 @@
+{% extends 'staff/mains/base.html' %}
+
+{% block main %}
+
+<div class="flex flex-col justify-center min-h-screen bg-gray-500">
+    <div class="mx-auto  w-1/3 my-8">
+        <div class="bg-white p-8 shadow-lg rounded-lg">
+            <div class="flex justify-center mb-5 space-x-3 ">
+                <p class="text-2xl font-bold">อาหาร</p>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-8 h-8 text-gray-700">
+                    <path d="M0 192c0-35.3 28.7-64 64-64c.5 0 1.1 0 1.6 0C73 91.5 105.3 64 144 64c15 0 29 4.1 40.9 11.2C198.2 49.6 225.1 32 256 32s57.8 17.6 71.1 43.2C339 68.1 353 64 368 64c38.7 0 71 27.5 78.4 64c.5 0 1.1 0 1.6 0c35.3 0 64 28.7 64 64c0 11.7-3.1 22.6-8.6 32L8.6 224C3.1 214.6 0 203.7 0 192zm0 91.4C0 268.3 12.3 256 27.4 256l457.1 0c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1L403.5 452c-2 16-15.6 28-31.8 28l-231.5 0c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4z"/>
+                </svg>
+                
+            </div>
+            <div class="flex justify-center mb-3  ">
+                <p class="badge badge-accent badge-outline">แก้ไขอาหารสำหรับ {{fish.fish_name}}</p>
+            </div>
+            <form  method="post" enctype="multipart/form-data"  class="flex justify-center space-y-3 " >
+                {% csrf_token %}
+                <label class="form-control w-full max-w-xs">
+                    <div class="label">
+                        <span class="label-text ">ประเภทอาหาร</span>
+                    </div>
+                    <input class="input input-bordered input-neutral w-full max-w-xs rounded-full" type="text" id="food_type"  name="food_type"  value={{food.food_type}} placeholder="กรอกประเภทอาหาร"  required/>
+
+                    <div class="label">
+                        <span class="label-text ">ชื่ออาหาร</span>
+                    </div>
+                    <input class="input input-bordered input-neutral w-full max-w-xs rounded-full" type="text" id="food_name"  name="food_name"  value={{food.food_name}} placeholder="กรอกชื่ออาหาร"  required/>
+
+                    <div class="label">
+                        <span class="label-text ">ความถี่ในการให้อาหาร (ครั้ง/วัน)</span>
+                    </div>
+                    <input class="input input-bordered input-neutral w-full max-w-xs rounded-full" type="number" id="feeding_frequency"  name="feeding_frequency" value={{food.feeding_frequency}} placeholder="ความถี่ในการให้อาหาร" min="0" step="any" required/>
+
+                     
+                    <div class="label">
+                        <span class="label-text">แหล่งอาหาร</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <label>
+                            <input class="radio radio-accent" type="radio" id="food_source_sur" name="food_source" value="SUR" 
+                            {% if food.food_source == 'SUR' %} checked {% endif %} required/>
+                            ผิวน้ำ
+                        </label>
+                        <label>
+                            <input class="radio radio-accent" type="radio" id="food_source_dee" name="food_source" value="DEE" 
+                            {% if  food.food_source == 'DEE' %} checked {% endif %} required/>
+                            น้ำลึก
+                        </label>
+                        <label>
+                            <input class="radio radio-accent" type="radio" id="food_source_sha" name="food_source" value="SHA" 
+                            {% if  food.food_source == 'SHA' %} checked {% endif %} required/>
+                            น้ำตื้น
+                        </label>
+                        <label>
+                            <input class="radio radio-accent" type="radio" id="food_source_bot" name="food_source" value="BOT" 
+                            {% if  food.food_source == 'BOT' %} checked {% endif %} required/>
+                            พื้นดิน
+                        </label>
+                    </div>
+
+  
+                    <div class="flex justify-center mt-5  ">
+                        <button type="submit"  class="btn btn-outline btn-neutral w-1/2" >บันทึก</button>
+                    </div>
+                 
+            
+                </label> 
+                    
+            </form>
+        </div>
+    </div>
+    
+</div> 
+{% endblock %}
