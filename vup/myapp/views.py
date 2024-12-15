@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q
 from django.utils.timesince import timesince
+from django.contrib.admin.views.decorators import staff_member_required
 
 def login_view(request):
     if request.method == 'POST':
@@ -20,7 +21,11 @@ def login_view(request):
             
             if user is not None:
                 login(request, user)  # เข้าสู่ระบบสำเร็จ
-                return redirect('home')  # เปลี่ยนเส้นทางไปยังหน้าหลักหรือหน้าที่ต้องการ
+
+                if user.is_superuser:  # ตรวจสอบว่าเป็น superuser หรือไม่
+                    return redirect('admin_dashboard')  # เปลี่ยนเส้นทางไปยังหน้า admin
+                else:
+                    return redirect('home')  # เปลี่ยนเส้นทางไปยังหน้าหลักหรือหน้าที่ต้องการ
             else:
                 form.add_error(None, 'Invalid login credentials')
 
@@ -29,6 +34,10 @@ def login_view(request):
 
     return render(request, 'registration/login.html', {'form': form})
 
+@staff_member_required
+def admin_dashboard(request):
+    # ที่นี่คุณสามารถดึงข้อมูลต่างๆ ที่ต้องการแสดงในแดชบอร์ดได้ เช่น สถิติ รายงานต่างๆ
+    return render(request, 'admin/dashboard.html')
 
 def register_view(request):
     if request.method == "POST":
@@ -50,26 +59,23 @@ def home_view(request):
     # events = Event.objects.all()
     events = Event.objects.select_related('created_by').all()
 
-    context = {
-        'member_data': member_data,
-        'form': form,
-        'events': events  
-    }
+    # context = {
+    #     'member_data': member_data,
+    #     'form': form,
+    #     'events': events,  
+    # }
 
-    return render(request, 'member/home.html', context)
+    return render(request, 'member/home.html', {'member_data': member_data,'form': form,'events': events,  })
 
 @login_required
-# def profile_view(request):
-#     member_data = Member.objects.get(username=request.user.username)
-#     return render(request, 'member/profile.html', {'member_data': member_data})
 def profile_view(request):
-    member_data = Member.objects.get(username=request.user.username)  # ดึงข้อมูลของผู้ใช้ที่ล็อกอิน
+    member_data = Member.objects.get(username=request.user.username) 
     
     if request.method == 'POST':
         form = MemberUpdateForm(request.POST, request.FILES, instance=member_data)
         if form.is_valid():
-            form.save()  # บันทึกข้อมูลที่อัปเดต
-            return redirect('profile')  # ถ้าฟอร์มถูกต้อง ให้รีไดเรกต์ไปที่หน้าโปรไฟล์
+            form.save()  
+            return redirect('profile')  
     else:
         form = MemberUpdateForm(instance=member_data)  # กรณีไม่ใช่ POST ให้สร้างฟอร์มจากข้อมูลผู้ใช้ที่ล็อกอิน
     
@@ -96,25 +102,27 @@ def new_event_view(request):
         form = EventForm() 
     return render(request, 'member/home.html', {'form': form})
 
-def event_list(request):
-    events = Event.objects.all()
-    for event in events:
-        event.time_since_created = timesince(event.created_at)  # ใช้ timesince เพื่อคำนวณเวลา
-    return render(request, 'your_template.html', {'events': events})
+# def event_list(request):
+#     events = Event.objects.all()
+#     for event in events:
+#         event.time_since_created = timesince(event.created_at)  
+#     return render(request, 'your_template.html', {'events': events})
 
-def update_event_view(request, event_id):
+
+
+def edit_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
 
+
     if request.method == 'POST':
-        form = EventForm(request.POST, instance=event)  # เชื่อมโยงฟอร์มกับอีเวนต์ที่มีอยู่
+        form = EventForm(request.POST, instance=event)
         if form.is_valid():
             form.save()  # บันทึกการเปลี่ยนแปลง
-            return redirect('home')  # เปลี่ยนเส้นทางไปยังหน้า home หลังจากบันทึกสำเร็จ
+            return redirect('home', event_id=event.id)  # ไปที่หน้ารายละเอียด event
     else:
-        form = EventForm(instance=event)  # ดึงข้อมูลจากโมเดลเพื่อแสดงในฟอร์ม
+        form = EventForm(instance=event)  # แสดงฟอร์มที่มีข้อมูลจาก event เดิม
 
-    return render(request, 'member/update_event.html', {'form': form})
-
+    return render(request, 'member/home.html', {'form': form, 'events': events})
 
 # ฟังก์ชันสำหรับลบ Event
 def delete_event_view(request, event_id):
@@ -124,18 +132,22 @@ def delete_event_view(request, event_id):
         return redirect('home')  
 
 def search_events(request):
-    # กำหนดตัวแปร query สำหรับเก็บคำค้นหาจากฟอร์ม
     member_data = Member.objects.get(username=request.user.username) 
     query = request.GET.get('query', '')
     
-    # ใช้ Q objects สำหรับการค้นหาหลายฟิลด์ (event_name, event_title, location)
     events = Event.objects.filter(
         Q(event_name__icontains=query) |
         Q(event_title__icontains=query) |
         Q(location__icontains=query)
     )
+    context = {
+        'member_data': member_data,
+        'events': events, 
+        'query': query,
+    }
 
-    return render(request, 'member/home.html', {'events': events, 'query': query,'member_data': member_data})
+    return render(request, 'member/home.html', context)
+    # return render(request, 'member/home.html', {'events': events, 'query': query,'member_data': member_data})
 
 # def filter_events(request):
 #     member_data = Member.objects.get(username=request.user.username) 

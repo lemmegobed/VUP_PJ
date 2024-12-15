@@ -144,3 +144,25 @@ class EventForm(forms.ModelForm):
             'province': forms.Select(choices=PROVINCE_CHOICES, attrs={'class': 'form-control'}),
         }
 
+
+class UpdateEventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['event_name', 'event_title', 'event_datetime', 'location', 'category', 'max_participants', 'province']
+
+        widgets = {
+            'event_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name'}),
+            'event_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Title'}),
+            'event_datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Location'}),
+            'category': forms.Select(choices=CATEGORY_CHOICES, attrs={'class': 'form-control'}),
+            'max_participants': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Participants', 'min': '1'}),
+            'province': forms.Select(choices=PROVINCE_CHOICES, attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['event_name'].required = False
+        self.fields['event_title'].required = False
+
+

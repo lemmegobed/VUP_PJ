@@ -10,11 +10,16 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
-
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Taviraj:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&display=swap" rel="stylesheet">
+   
+   <style>
         
         body,html{
-            font-family: Arial, Helvetica, sans-serif;
+            font-family:"Anuphan", sans-serif;
             background-color: #f0eeee;
             /* margin-left: 30%; */
         }
@@ -186,15 +191,6 @@
         margin-bottom: 30px;
     }
 
-    /* กรอบครอบชั้นแรก */
-    /* .inner-box {
-        width: 100%;
-        
-        padding: 20px;
-        border-radius: 10px; 
-        background-color: #ffffff; 
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    } */
 
     /* กรอบครอบชั้นที่สอง */
     .content-box {
@@ -224,9 +220,9 @@
         width: 200px; 
         height: 200px;
         border-radius: 50%; 
-        /* border: 2px solid #ffffff;  */
+        border: 1px solid #adadad; 
         object-fit: cover; 
-        box-shadow: 0 5px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 4px rgba(0, 0, 0, 0.1);
     }
 
     .username-profile {
@@ -321,6 +317,28 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .profile-header {
+            display: flex;
+            align-items: center; 
+            justify-content: flex-start; 
+            gap: 10px; 
+            margin-left: 0; 
+            padding: 10px;
+        }
+
+        .my_profile_head {
+            font-size: 16px; 
+            font-weight: bold;
+            color: #000000; 
+            margin: 0; 
+        }
+
+        .profile-header i {
+            font-size: 30px; 
+            color: #000000; 
+            margin-right: 5px; 
+            /* transition: transform 0.3s, color 0.3s;  */
+        }
 
     </style>
 </head>
@@ -354,10 +372,15 @@
     </div>
 
     <div class="outer-box-profile">
-
-        <!-- <div class="inner-box"> -->
+        <div class="profile-header">
+            <i class="fa-regular fa-circle-user"></i>
+            <p class="my_profile_head">MY PROFILE</p>
+        </div>
+               
+        <div class="inner-box">
             <div class="box-profile-show">
-                <p class="my_profile_head">MY PROFILE</p>
+                
+
                 <img src="{{ member_data.profile.url }}" alt="Profile Image" class="profile-image-show">
                 
                 <div class="in-box-profile-show">
@@ -388,7 +411,7 @@
 
                 <button id="edit-profile-btn" class="edit-button">แก้ไขข้อมูล</button>
 
-    
+            <!-- ฟอร์มแก้ไขข้อมูลส่วนตัวจ้าาา -->
             <div id="edit-profile-modal" class="modal">
                 <div class="modal-content">
                     <span class="close" id="close-modal">&times;</span>
@@ -405,6 +428,7 @@
     
                 </div>
         </div>
+    </div>
     </div>
 
         <div>

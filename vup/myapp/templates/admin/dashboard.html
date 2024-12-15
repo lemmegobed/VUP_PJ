@@ -1,0 +1,25 @@
+<!-- templates/admin/dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the Admin Dashboard</h1>
+    
+    <h2>Reports</h2>
+    <p>Here you can view various reports and manage data.</p>
+
+    <!-- ตัวอย่างการแสดงรายงาน เช่น จำนวนผู้ใช้ -->
+    <!-- <h3>Total Users: {{ total_users }}</h3> -->
+
+    <!-- ตัวอย่างการแสดงข้อมูลจากโมเดลต่างๆ -->
+    <h3>Recent Events:</h3>
+    <ul>
+        {% for event in recent_events %}
+            <li>{{ event.event_name }} - {{ event.event_datetime }}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

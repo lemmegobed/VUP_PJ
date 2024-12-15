@@ -775,18 +775,7 @@
 
     <div class="home_page" id="home_page">
 
-        <!-- ผลการค้นหา -->
-        <!-- <div class="current-search-text">
-            {% if query %}
-            <div class="current-search">
-                <a href="{% url 'home' %}" class="btn-back">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-                <p> search :</search>: <strong>{{ query }}</strong></p>
-            
-            </div>
-            {% endif %}
-        </div> -->
+
 
         <!-- ค้นหาแบบข้อความ -->
         <div class="search-container">
@@ -812,60 +801,15 @@
                 </form>
                 
 
-                <!-- <form method="get" action="{% url 'search_events' %}" class="search-form"></form>
-                    <div class="input-icon">
-                        <i class="fas fa-search" id="search-icon"></i> 
-                        <input 
-                            type="text" 
-                            name="query" 
-                            value="{{ query }}" 
-                            placeholder="Search events..." 
-                            class="form-control" 
-                            id="search-input"
-                        >
-                    </div>
-                </form> -->
+
 
             </div>
         </div>
         
-        <!-- <div class="filter-box">
-            <div class="filter-item">
-                <select class="filter-dropdown location-dropdown">
-                    <option value="" selected disabled>
-                        <i class="fas fa-map-marker-alt"></i> เลือกจังหวัด
-                    </option>
-                    <option value="1">จังหวัด 1</option>
-                    <option value="2">จังหวัด 2</option>
-                </select>
-            </div>
-            <div class="filter-item">
-                <select class="filter-dropdown people-dropdown">
-                    <option value="" selected disabled>
-                        <i class="fas fa-users"></i> จำนวนคน
-                    </option>
-                    <option value="1">1 คน</option>
-                    <option value="2">2 คน</option>
-                </select>
-            </div>
-            <div class="filter-item">
-                <select class="filter-dropdown category-dropdown">
-                    <option value="" selected disabled>
-                        <i class="fas fa-tags"></i> เลือกหมวด
-                    </option>
-                    <option value="1">หมวด 1</option>
-                    <option value="2">หมวด 2</option>
-                </select>
-            </div>
-            <div class="search-btn-container">
-                <button class="search-btn">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </div> -->
-
+    
+<!-- 
         <div class="filter-box">
-            <!-- Dropdown เลือกจังหวัด -->
+             
             <div class="filter-item">
                 <select name="province" class="filter-dropdown location-dropdown">
                     <option value="" selected disabled>เลือกจังหวัด</option>
@@ -877,7 +821,7 @@
                 </select>
             </div>
         
-            <!-- Dropdown จำนวนคน -->
+            
             <div class="filter-item">
                 <select name="max_participants" class="filter-dropdown people-dropdown">
                     <option value="" selected disabled>จำนวนคน</option>
@@ -889,7 +833,7 @@
                 </select>
             </div>
         
-            <!-- Dropdown หมวดหมู่ -->
+            
             <div class="filter-item">
                 <select name="category" class="filter-dropdown category-dropdown">
                     <option value="" selected disabled>เลือกหมวด</option>
@@ -901,24 +845,25 @@
                 </select>
             </div>
         
-            <!-- ปุ่มค้นหา -->
+            
             <div class="search-btn-container">
                 <button type="submit" class="search-btn">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
         </div>
-        
+         -->
         
         
 
         <p class="feed">feed now</p>
 
-        <!-- post event -->
+    <!-- post event -->
         <div class="event-container">
             {% for event in events %}
             <div class="event-post">
-                <!-- Left side content (Profile and Event Details) -->
+                
+                <!-- Profile and Event Details -->
                 <div class="post-left">
 
                     <!-- รายละเอียดผู้โพสต์ -->
@@ -971,21 +916,40 @@
                     </div>
                 </div>
 
-    
+ 
     <div class="post-right">
         <div class="dropdown">
             <i class="fa-solid fa-ellipsis-vertical" onclick="toggleDropdownMenu('{{ event.id }}')" style="cursor: pointer;"></i>
             <div class="dropdown-menu" id="dropdownMenu-{{ event.id }}">
-                <button class="dropdown-item" onclick="openEditModal('{{ event.id }}', '{{ event.event_name }}', '{{ event.event_title }}', '{{ event.event_datetime|date:'Y-m-d\TH:i' }}', '{{ event.location }}', '{{ event.category }}', '{{ event.participants }}', '{{ event.province }}')">Edit</button>
-        
+                <!-- <button class="dropdown-item" onclick="openEditModal('{{ event.id }}', '{{ event.event_name }}', '{{ event.event_title }}', '{{ event.event_datetime|date:'Y-m-d\TH:i' }}', '{{ event.location }}', '{{ event.category }}', '{{ event.participants }}', '{{ event.province }}')">Edit</button> -->
+                <form id="editEventForm{{ event.id }}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <!-- <button type="button" class="dropdown-item" onclick="openeditEventModal('{{ event.id }}')">Edit</button> -->
+                    {% if event.id %}
+                        <!-- <button class="edit-event-btn" data-event-id="{{ event.id }}">Edit</button> -->
+                    
+                        <button class="dropdown-item" onclick="openEditModal('{{ event.id }}')">Edit</button>  
+                    {% else %}
+                        <p>No event id</p>
+                    {% endif %} 
+
+
+                </form>
+
                 <form id="deleteForm-{{ event.id }}" method="POST" action="{% url 'delete_event' event.id %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="button" class="dropdown-item" onclick="openConfirmDeleteModal('{{ event.id }}')">Delete</button>
                 </form>
             </div>
             
+         
 
         </div>
+    
+     
+        
+        <!-- Popup container -->
+        <div id="popup-container"></div>
         
         
 
@@ -994,7 +958,7 @@
             <button class="join-btn">
                 <p>i want to</p>
                 <h1>JOIN</h1>
-                <p>{{ event.max_participants }}/{{ event.participants }}</p>
+                <p>{{ event.participants }}/{{ event.max_participants }}</p>
             </button>
         </div>
     </div>
@@ -1009,114 +973,53 @@
             {% endfor %}
         </div>
 
-        <!-- ฟอร์ม pop-up สำหรับสร้าง Event -->
-        <!-- <div id="eventModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Create New Event</h2>
-                <form id="eventForm" method="POST">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn">Create</button>
-                </form>
-            </div>
-        </div> -->
+
 
         <div id="eventModal" class="modal">
             {% include 'member/new_event.html' %}
         </div>
 
-        
-       <!-- Modal สำหรับแก้ไข Event -->
-        <!-- <div id="editEventModal-{{ event.id }}" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeEditModal('{{ event.id }}')">&times;</span>
-                <h2>Edit Event</h2>
-                <form id="editEventForm-{{ event.id }}" method="POST" action="">
-                    {% csrf_token %}
-                    <input type="hidden" id="editEventId-{{ event.id }}" name="event_id">
+       <!-- Modal HTML -->
 
-                    <label for="edit_event_name">Event Name:</label>
-                    <input type="text" id="edit_event_name-{{ event.id }}" name="event_name" value="{{ event.event_name }}" required>
+<div id="editEventModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditEventModal()">&times;</span>
+        <h2>Edit Event Details</h2>
 
-                    <label for="edit_event_title">Event Title:</label>
-                    <input type="text" id="edit_event_title-{{ event.id }}" name="event_title" value="{{ event.event_title }}" required>
-
-                    <label for="edit_event_datetime">Event Date:</label>
-                    <input type="datetime-local" id="edit_event_datetime-{{ event.id }}" name="event_datetime" value="{{ event.event_datetime|date:'Y-m-d\TH:i' }}" required>
-
-                    <label for="location">Location:</label>
-                    <input type="text" id="edit_location-{{ event.id }}" name="location" value="{{ event.location }}" required>
-
-                    <label for="category">Category:</label>
-                    <select id="edit_category-{{ event.id }}" name="category" required>
-                        <option value="Sport" {% if event.category == 'Sport' %}selected{% endif %}>Sport</option>
-                        <option value="Music" {% if event.category == 'Music' %}selected{% endif %}>Music</option>
-                        <option value="Education" {% if event.category == 'Education' %}selected{% endif %}>Education</option>
-                        <option value="Technology" {% if event.category == 'Technology' %}selected{% endif %}>Technology</option>
-                    </select>
-
-                    <label for="max_participants">Participants:</label>
-                    <input type="number" id="edit_max_participants-{{ event.id }}" name="max_participants" value="{{ event.max_participants }}" min="1" required>
-
-                    <button type="submit" class="btn">Update</button>
-                </form>
-            </div>
-        </div> -->
-
-        <!-- Modal สำหรับแก้ไข Event -->
-        <div id="editEventModal-{{ event.id }}" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeEditModal('{{ event.id }}')">&times;</span>
-                <h2>Edit Event</h2>
-        <form id="editEventForm" method="POST" action="{% url 'update_event' 0 %}">
+       
+        <form method="post" id="updateEventForm">
             {% csrf_token %}
-            <div>
-                <label for="id_event_name">ชื่อกิจกรรม:</label>
-                <input type="text" id="edit_event_name" name="event_name" required>
-            </div>
-            <div>
-                <label for="id_event_title">รายละเอียดกิจกรรม:</label>
-                <input type="text" id="edit_event_title" name="event_title" required>
-            </div>
-            <div>
-                <label for="id_event_datetime">วัน/เวลา:</label>
-                <input type="datetime-local" id="edit_event_datetime" name="event_datetime" required>
-            </div>
-            <div>
-                <label for="id_location">สถานที่จัดกิจกรรม:</label>
-                <input type="text" id="edit_location" name="location" required>
-            </div>
-            <div>
-                <label for="id_category">หมวดหมู่:</label>
-                <select id="edit_category" name="category" required>
-                    <option value="Sport">Sport</option>
-                    <option value="Music">Music</option>
-                    <option value="Education">Education</option>
-                    <option value="Technology">Technology</option>
-                </select>
-            </div>
-            <div>
-                <label for="id_participants">จำนวนผู้เข้าร่วมสูงสุด:</label>
-                <input type="number" id="edit_max_participants" name="max_participants" required>
-            </div>
-            <div>
-                <label for="id_province">จังหวัด:</label>
-                <select id="edit_province" name="province" required>
-                    <!-- ตัวเลือกของจังหวัด -->
-                    <option value="Sport">Sport</option>
-                    <option value="Music">Music</option>
-                </select>
-            </div>
-            <button type="submit">Save</button>
+            
+            <!-- ใส่ค่า event.id ใน hidden input -->
+            <input type="hidden" name="event_id" value="{{ event.id }}">
+            
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
+        
     </div>
 </div>
 
-        
 
+        <!-- <div id="editEventModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditEventModal()">&times;</span>
+                <h2>Edit Event Details</h2>
         
                 
+                <form method="post" id="updateEventForm">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+                
+            </div>
+        </div> -->
+   
+
+        
+
+          
              <!-- ป๊อปอัพยืนยันการลบ -->
              <div id="confirmDeleteModal" class="modal">
                 <div class="modal-content">
@@ -1136,6 +1039,73 @@
    
 
 </div>
+
+<script>
+    const formData = new FormData(document.getElementById('EventForm'));
+
+// ตรวจสอบว่าฟอร์มเก็บค่าทั้งหมด
+for (let pair of formData.entries()) {
+    console.log(pair[0] + ': ' + pair[1]);
+}
+
+</script>
+
+<!-- แก้ไขอีเว้น -->
+
+<script>
+    function openEditEventModal() {
+    const modal = document.getElementById("editEventModal");
+    modal.style.display = "block";  // เปิด modal
+
+    const form = document.getElementById("updateEventForm");
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();  // ป้องกันการส่งฟอร์มโดยอัตโนมัติ
+
+        const formData = new FormData(form);
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                modal.style.display = "none";  // ปิด modal
+                window.location.reload();  // รีเฟรชหน้าเว็บ
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+}
+
+function closeEditEventModal() {
+    const modal = document.getElementById("editEventModal");
+    modal.style.display = "none";  // ปิด modal
+}
+
+</script>
+<!-- <script>
+// ฟังก์ชันเปิด modal
+function openEditEventModal() {
+    document.getElementById("editEventModal").style.display = "block";
+}
+
+// ฟังก์ชันปิด modal
+function closeEditEventModal() {
+    document.getElementById("editEventModal").style.display = "none";
+}
+
+// การปิด modal ด้วยการคลิกที่ปุ่มปิด (X)
+window.onclick = function(event) {
+    if (event.target === document.getElementById("editEventModal")) {
+        closeEditEventModal();
+    }
+}
+
+</script> -->
+
 
 <!-- เปลี่ยนไอคอนเป็นย้อนกลับ -->
 <script>
@@ -1212,6 +1182,64 @@
         })
         .catch(error => console.log('Error:', error));
     });
+</script>
+
+
+
+<!-- แก้ไขอีเว้น -->
+<script>
+    // ฟังก์ชันที่ใช้เปิด modal สำหรับการแก้ไข
+function openEditModal(eventId) {
+    const modal = document.getElementById("eventModal");
+    const eventForm = document.getElementById('eventForm');
+    const updateUrl = `/edit-event/${eventId}/`; // URL สำหรับการแก้ไข Event
+
+    // เรียกข้อมูลของฟอร์มจาก server
+    fetch(updateUrl, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => response.text())
+    .then(html => {
+        modal.innerHTML = html;  // ใส่ HTML ของฟอร์มเข้าไปใน modal
+        modal.classList.add("active");  // แสดง modal
+
+        // ตั้งค่า event listener สำหรับฟอร์ม
+        eventForm.addEventListener('submit', function(e) {
+            e.preventDefault();  // ป้องกันการส่งฟอร์มแบบปกติ
+
+            const formData = new FormData(eventForm);
+            fetch(updateUrl, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+
+            
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    modal.classList.remove("active");  // ปิด modal
+                    window.location.reload();  // รีเฟรชหน้าเว็บ
+                } else {
+                    // แสดง error ในกรณีที่เกิดปัญหากับฟอร์ม
+                    console.log(data.errors);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 </script>
 
 <!-- ใช้ moment.js คำนวณเวลา ว่าโพสมานานยัง -->
